@@ -21,9 +21,10 @@ Installation
 
 1.  安装 Python 2.7，pip，以及 gdata 模块。
 
-    请确保您的 Linux 系统已经安装了 Python 2.7 (http://www.python.org)、pip
-    (http://pypi.python.org)。然后执行 pip install gdata。
-    （Arch Linux 用户需要执行 pip2 install gdata）。
+    请确保您的 Linux 系统已经安装了 Python 2.7 ( http://www.python.org ), pip
+    ( http://pypi.python.org )。然后执行 pip install gdata。
+    
+    Arch Linux 用户需要执行 pip2 install gdata。
     
 2.  执行 install.sh。
 
