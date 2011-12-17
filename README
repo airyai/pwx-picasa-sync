@@ -1,0 +1,55 @@
+平芜泫的 Picasa 相册下载工具。
+Email: airyai@gmail.com
+
+========
+Features
+========
+
+1.  根据配置文件进行操作的命令行工具，可以加入 Windows 任务计划或者 Linux crontab，
+    自动更新需要下载的相册。
+2.  对每一个相册建立数据库，记录下载过的图片，以避免重复下载。（数据库为每个相册文件夹
+    下面的 .piacaalbum 文件。
+3.  支持身份验证。可以配置 Google 相册的邮箱和密码登陆 Picasa 相册，下载受限相册中的
+    图片。（如果是二次登陆，请为这个程序设置应用程序密码。）
+4.  多线程支持。此程序使用了多线程下载相册数据，使得下载的时间大大缩短。
+
+============
+Installation
+============
+
+* For Linux:
+
+1.  安装 Python 2.7，pip，以及 gdata 模块。
+
+    请确保您的 Linux 系统已经安装了 Python 2.7 (http://www.python.org)、pip
+    (http://pypi.python.org)。然后执行 pip install gdata。
+    （Arch Linux 用户需要执行 pip2 install gdata）。
+    
+2.  执行 install.sh。
+
+* For Windows:
+
+直接解压运行 picasasync.exe 即可。
+
+=============
+Configuration
+=============
+
+PicasaSync 工具是依赖配置文件确定工作任务的。
+可以通过命令行参数指定 PicasaSync 使用的配置文件，即形如 picasasync [config-file]。
+
+示例配置文件在源代码 picasasync.conf 中给出，格式在其中以注释形式有相对完整的说明。
+
+如果没有指定配置文件，则 PicasaSync 将在以下位置搜寻配置文件：
+
+1.  (当前路径)/picasasync.conf
+2.  (当前路径)/.picasasync
+3.  (用户路径)/picasasync.conf
+4.  (用户路径)/.picasasync
+
+值得注意的是，Windows XP 的“用户路径”一般为“C:\Documents and Settings\用户名”，
+Windows 7 一般为“C:\Users\用户名”，而 Posix (Linux & Unix) 系统的用户路径一般为
+“/home/用户名”。
+
+程序使用的配置文件路径将在启动后显示。
+
