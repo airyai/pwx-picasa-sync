@@ -94,7 +94,12 @@ def load_feed(clt, feed):
 
 for feed in cfg['feeds']:        
     workers.make_job(load_feed, feed)
-workers.wait()
+    
+try:
+    workers.wait()
+except TypeError:
+    # fix strange exception on exit.
+    pass
 
 albums = []
 for r in workers.jar:
@@ -131,7 +136,12 @@ def load_album(clt, album):
 
 for album in albums:        
     workers.make_job(load_album, album)
-workers.wait()
+    
+try:
+    workers.wait()
+except TypeError:
+    # fix strange exception on exit.
+    pass
 
 console.all_finished()
 
