@@ -30,11 +30,21 @@ class ThreadPool:
         self.jar_lock.release_lock()
         
     def _worker(self):
+        clt = self.clients[threading.current_thread().name]
         while True:
             job = self.jobs.get()
-            ret = job[0](self.clients[threading.current_thread().name], *job[1])
-            if ret is not None:
-                self.put_jar(ret)
+            (proc, args) = (None, None)
+            
+            if isinstance(job, list) or isinstance(job, tuple):
+                proc, args = job[0], job[1]
+                if not callable(proc):
+                    proc = None
+                
+            if proc is not None:
+                ret = proc(clt, *args)
+                if ret is not None:
+                    self.put_jar(ret)
+                    
             self.jobs.task_done()
             
     def make_job(self, proc, *args):
