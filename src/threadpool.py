@@ -32,20 +32,24 @@ class ThreadPool:
     def _worker(self):
         clt = self.clients[threading.current_thread().name]
         while True:
-            job = self.jobs.get()
-            (proc, args) = (None, None)
-            
-            if isinstance(job, list) or isinstance(job, tuple):
-                proc, args = job[0], job[1]
-                if not callable(proc):
-                    proc = None
+            try:
+                job = self.jobs.get()
+                (proc, args) = (None, None)
                 
-            if proc is not None:
-                ret = proc(clt, *args)
-                if ret is not None:
-                    self.put_jar(ret)
+                if isinstance(job, list) or isinstance(job, tuple):
+                    proc, args = job[0], job[1]
+                    if not callable(proc):
+                        proc = None
                     
-            self.jobs.task_done()
+                if proc is not None:
+                    ret = proc(clt, *args)
+                    if ret is not None:
+                        self.put_jar(ret)
+                        
+                self.jobs.task_done()
+            except TypeError:
+                # fix strange exception on exit.
+                pass
             
     def make_job(self, proc, *args):
         self.jobs.put( (proc, args) )
