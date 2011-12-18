@@ -33,12 +33,20 @@ _console_lock = threading.Lock()
 
 def info(msg):
     _console_lock.acquire_lock()
-    sys.stdout.write(u'%s\n' % msg)
+    try:
+        sys.stdout.write(uni(msg))
+    except UnicodeError:
+        sys.stdout.write(u'[**** Unicode Error ****]')
+    sys.stdout.write(u'\n')
     _console_lock.release_lock()
     
 def err(msg):
     _console_lock.acquire_lock()
-    sys.stderr.write(u'%s\n' % msg)
+    try:
+        sys.stderr.write(uni(msg))
+    except UnicodeError:
+        sys.stderr.write(u'[**** Unicode Error ****]')
+    sys.stderr.write(u'\n')
     traceback.print_exc()
     _console_lock.release_lock()
 
@@ -77,7 +85,7 @@ def album_db_ioerror(repo):
     err(u'>! 无法打开相册 <%s> 的数据库。' % repo.path)
     
 def album_begin(repo):
-    info(u'>> 读取相册更新 <%s> (%s)。' % (repo.path, len(repo.photos)))
+    info(u'>> 取得相册 <%s> 目录 (%s)。' % (repo.path, len(repo.photos)))
     
 def photo_skip(repo, photo, prog_id):
     #info(u'* (%s/%s) 跳过已存在的本地图片 %s/%s。' %
@@ -85,9 +93,12 @@ def photo_skip(repo, photo, prog_id):
     pass
 
 total_photo_count = 0
+total_photo_size = 0
+
 def photo_ok(repo, photo, prog_id):
-    global total_photo_count
+    global total_photo_count, total_photo_size
     total_photo_count += 1
+    total_photo_size += photo[3]
     info(u'+ (%s/%s) 新增图片 %s/%s (%s)。' %
             (prog_id, repo.count, repo.path, photo[0], human_size(photo[3]))
         )
@@ -106,5 +117,6 @@ def photo_io_error(repo, photo, prog_id):
                      (prog_id, repo.count, repo.path, photo[2]))
     
 def all_finished():
-    info(u'\n全部完成，本次共更新 %s 张图片。' % total_photo_count)
+    info(u'\n全部完成，本次共更新 %s 张图片，总计 %s。' % 
+            (total_photo_count, human_size(total_photo_size)) )
     

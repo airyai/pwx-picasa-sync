@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-import threading
+import threading, time
 from Queue import Queue
 
 class ThreadPool:

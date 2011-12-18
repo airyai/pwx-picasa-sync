@@ -21,7 +21,7 @@ class FeedDiscover:
             return None
         return ( mt.groups()[0], mt.groups()[2] )
     
-    def discover(self, feed, gclient):
+    def discover(self, feed, gclient, inverse = False):
         '''
         解析 feed 所包含的相册列表。
         
@@ -38,7 +38,9 @@ class FeedDiscover:
         
         if isinstance(feed, list) or isinstance(feed,tuple):
             regex = re.compile(uni(feed[1]))
-            m_test = lambda nm: regex.match(nm)
+            m_test = lambda nm: regex.search(nm)
+            if len(feed) > 2:
+                inverse = not not feed[2]
             feed = feed[0]
             
         feed = uni(feed)
@@ -58,9 +60,12 @@ class FeedDiscover:
         
         for album in albums.entry:
             title = uni(album.title.text)
-            if m_test(title):
-                id = uni(album.id.text)
-                ret.append( (feed[0], id[id.rfind(u'/')+1:]) )
+            pass_test = m_test(title)
+            if inverse: 
+                pass_test = not pass_test
+            if pass_test:
+                mid = uni(album.id.text)
+                ret.append( (feed[0], mid[mid.rfind(u'/')+1:]) )
                 
         return tuple(ret)
     
