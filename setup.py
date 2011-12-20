@@ -9,7 +9,7 @@ setup(
         scripts = ["picasasync", ],
         include_package_data = True,
 
-        setup_requires = ['gdata>=2.0'],
+        install_requires = ['gdata>=2.0'],
 
         author = "pwx",
         author_email = "airyai@gmail.com",

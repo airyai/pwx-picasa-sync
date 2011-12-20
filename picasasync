@@ -4,7 +4,7 @@
 __version__ = "0.1b2"
 
 import sys, os, re
-import picasasync.threadpool
+import picasasync.threadpool as threadpool
 import gdata.service
 import gdata.photos.service
 
